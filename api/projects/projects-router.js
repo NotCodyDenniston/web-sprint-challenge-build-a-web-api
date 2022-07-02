@@ -45,4 +45,41 @@ router.post('/', validateProject, (req,res) => {
     })
 })
 
+router.put('/:id', validateProjectId, validateProject, (req,res) => {
+    const id = req.params.id
+    Projects.update(id, req.body)
+    .then(updatedProject => {
+        res.json(updatedProject)
+    })
+    .catch(err => {
+        res.status(500).json({
+            message: "Did not update successfully"
+        })
+    })
+})
+
+router.delete('/:id', validateProjectId,  (req, res) => {
+    Projects.remove(req.params.id)
+    .then(deletedProject => {
+        res.status(204).json(deletedProject)
+    })
+    .catch(err => {
+        res.status(500).json({
+            message: "Did not delete successfully"
+        })
+    })
+})
+
+router.get('/:id/actions', validateProjectId, (req,res) => {
+    Projects.getProjectActions(req.params.id)
+    .then(actions => {
+        res.json(actions)
+    })
+    .catch(err => {
+        res.status(500).json({
+            message: "error getting project actions"
+        })
+    })
+})
+
 module.exports = router
